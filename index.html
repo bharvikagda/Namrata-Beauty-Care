@@ -77,7 +77,6 @@
             background: var(--primary-hover);
         }
 
-        /* Original Unsplash Background Image */
         .hero {
             background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=1200&q=80') center/cover no-repeat;
             height: 50vh;
@@ -116,7 +115,6 @@
             letter-spacing: 0.5px;
         }
 
-        /* --- STYLISH SERVICES GRID --- */
         .services-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
@@ -162,7 +160,6 @@
             font-weight: 600;
         }
 
-        /* --- HOVER EFFECTS --- */
         .service-card:hover {
             transform: translateY(-8px);
             box-shadow: var(--shadow-hover);
@@ -177,7 +174,6 @@
             transform: scale(1.15) rotate(5deg);
         }
 
-        /* --- BOOKING FORM STYLES --- */
         .booking-section {
             background: var(--card-bg);
             padding: 2rem;
@@ -342,10 +338,6 @@
                     <label>Date</label>
                     <input type="date" id="custDate" required>
                 </div>
-                <div class="form-group">
-                    <label>Time</label>
-                    <input type="time" id="custTime" required>
-                </div>
                 <button type="submit" id="submitBtn" class="btn">Send Booking Request</button>
             </form>
 
@@ -366,12 +358,10 @@
     </footer>
 
     <script>
-        // Configured EmailJS Credentials
         const PUBLIC_KEY = "qW4toNwES4gnrWCkg";
         const SERVICE_ID = "service_x5a1tlz";
         const TEMPLATE_ID = "template_q0ynfw8";
 
-        // EmailJS Initialize
         emailjs.init(PUBLIC_KEY);
 
         document.getElementById('bookingForm').addEventListener('submit', function(e) {
@@ -385,11 +375,9 @@
                 customer_name: document.getElementById('custName').value,
                 customer_phone: document.getElementById('custPhone').value,
                 service_name: document.getElementById('custService').value,
-                booking_date: document.getElementById('custDate').value,
-                booking_time: document.getElementById('custTime').value
+                booking_date: document.getElementById('custDate').value
             };
 
-            // Send Mail via EmailJS
             emailjs.send(SERVICE_ID, TEMPLATE_ID, params)
                 .then(function() {
                     document.getElementById('bookingForm').style.display = 'none';
