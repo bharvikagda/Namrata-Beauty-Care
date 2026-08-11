@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="google-site-verification" content="iM-2ipZhz2YM9WXS3qQYq19VMziSEpRFAIaIwp4s7dQ" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Namrata Beauty Care</title>
     
@@ -16,7 +15,8 @@
             --bg-light: #faf9f6;
             --text-dark: #333333;
             --card-bg: #ffffff;
-            --shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            --shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+            --shadow-hover: 0 12px 25px rgba(212, 163, 115, 0.25);
         }
 
         * {
@@ -42,6 +42,8 @@
             position: sticky;
             top: 0;
             z-index: 100;
+            flex-wrap: wrap;
+            gap: 1rem;
         }
 
         .logo {
@@ -50,15 +52,34 @@
             color: var(--primary);
         }
 
+        nav {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
         nav a {
-            margin-left: 1.5rem;
             text-decoration: none;
             color: var(--text-dark);
             font-weight: 500;
         }
 
+        .call-btn {
+            background: var(--primary);
+            color: white !important;
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+
+        .call-btn:hover {
+            background: var(--primary-hover);
+        }
+
+        /* Original Unsplash Background Image */
         .hero {
-            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=1200&q=80') center/cover;
+            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=1200&q=80') center/cover no-repeat;
             height: 50vh;
             display: flex;
             flex-direction: column;
@@ -72,6 +93,12 @@
         .hero h1 {
             font-size: 2.8rem;
             margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.6);
         }
 
         .container {
@@ -82,32 +109,75 @@
 
         .section-title {
             text-align: center;
-            font-size: 2rem;
+            font-size: 2.2rem;
             color: var(--primary);
-            margin-bottom: 2rem;
+            margin-bottom: 2.5rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
         }
 
+        /* --- STYLISH SERVICES GRID --- */
         .services-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 1.5rem;
+            grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+            gap: 1.8rem;
             margin-bottom: 4rem;
         }
 
         .service-card {
             background: var(--card-bg);
-            padding: 1.5rem;
-            border-radius: 12px;
+            padding: 2rem 1.5rem;
+            border-radius: 16px;
             box-shadow: var(--shadow);
             text-align: center;
+            border: 1px solid rgba(212, 163, 115, 0.15);
+            transition: all 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
         }
 
-        .price {
-            color: var(--primary);
-            font-weight: bold;
-            margin-top: 0.5rem;
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, #d4a373, #e7c6a5);
+            opacity: 0;
+            transition: opacity 0.3s ease;
         }
 
+        .service-card .icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.8rem;
+            display: block;
+            transition: transform 0.3s ease;
+        }
+
+        .service-card h3 {
+            font-size: 1.15rem;
+            color: var(--text-dark);
+            font-weight: 600;
+        }
+
+        /* --- HOVER EFFECTS --- */
+        .service-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--primary);
+        }
+
+        .service-card:hover::before {
+            opacity: 1;
+        }
+
+        .service-card:hover .icon {
+            transform: scale(1.15) rotate(5deg);
+        }
+
+        /* --- BOOKING FORM STYLES --- */
         .booking-section {
             background: var(--card-bg);
             padding: 2rem;
@@ -133,6 +203,12 @@
             border: 1px solid #ddd;
             border-radius: 8px;
             font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            border-color: var(--primary);
+            outline: none;
         }
 
         .btn {
@@ -142,13 +218,15 @@
             border: none;
             border-radius: 25px;
             font-size: 1rem;
+            font-weight: 600;
             cursor: pointer;
             width: 100%;
-            transition: background 0.3s;
+            transition: background 0.3s, transform 0.2s;
         }
 
         .btn:hover {
             background: var(--primary-hover);
+            transform: translateY(-2px);
         }
 
         .status-box {
@@ -174,10 +252,24 @@
 
         footer {
             text-align: center;
-            padding: 1.5rem;
+            padding: 2rem 1.5rem;
             background: #222;
             color: #fff;
             margin-top: 4rem;
+        }
+
+        footer a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        .footer-info {
+            margin-bottom: 1rem;
+            line-height: 1.8;
         }
     </style>
 </head>
@@ -188,6 +280,7 @@
         <nav>
             <a href="#services">Services</a>
             <a href="#booking">Booking</a>
+            <a href="tel:+919725573152" class="call-btn">📞 Call Now</a>
         </nav>
     </header>
 
@@ -200,20 +293,24 @@
         <h2 class="section-title">Our Services</h2>
         <div class="services-grid">
             <div class="service-card">
+                <span class="icon">✨</span>
+                <h3>Eyebrow & Wax</h3>
+            </div>
+            <div class="service-card">
+                <span class="icon">🌿</span>
                 <h3>Facial & Skin Care</h3>
-                <div class="price">From ₹500</div>
             </div>
             <div class="service-card">
-                <h3>Hair Styling & Cuts</h3>
-                <div class="price">From ₹300</div>
+                <span class="icon">✂️</span>
+                <h3>Hair Cut</h3>
             </div>
             <div class="service-card">
-                <h3>Bridal Makeup</h3>
-                <div class="price">From ₹5,000</div>
+                <span class="icon">💄</span>
+                <h3>Makeup & Hairstyle</h3>
             </div>
             <div class="service-card">
-                <h3>Manicure & Pedicure</h3>
-                <div class="price">From ₹400</div>
+                <span class="icon">👑</span>
+                <h3>Bridal Package</h3>
             </div>
         </div>
     </div>
@@ -234,10 +331,11 @@
                     <label>Select Service</label>
                     <select id="custService" required>
                         <option value="">-- Choose Service --</option>
+                        <option value="Eyebrow & Wax">Eyebrow & Wax</option>
                         <option value="Facial & Skin Care">Facial & Skin Care</option>
-                        <option value="Hair Styling & Cuts">Hair Styling & Cuts</option>
-                        <option value="Bridal Makeup">Bridal Makeup</option>
-                        <option value="Manicure & Pedicure">Manicure & Pedicure</option>
+                        <option value="Hair Cut">Hair Cut</option>
+                        <option value="Makeup & Hairstyle">Makeup & Hairstyle</option>
+                        <option value="Bridal Package">Bridal Package</option>
                     </select>
                 </div>
                 <div class="form-group">
@@ -260,6 +358,10 @@
     </div>
 
     <footer>
+        <div class="footer-info">
+            <p><strong>📞 Contact:</strong> <a href="tel:+919725573152">+91 9725573152</a></p>
+            <p><strong>📍 Address:</strong> <a href="https://www.google.com/maps/search/?api=1&query=D-301+Madhav+Residency+Laganiya+Hanuman+Mandir+viratnagar+Road+Odhav" target="_blank">D-301 Madhav Residency, Laganiya Hanuman Mandir, Viratnagar Road, Odhav</a></p>
+        </div>
         <p>&copy; 2026 Namrata Beauty Care. All Rights Reserved.</p>
     </footer>
 
