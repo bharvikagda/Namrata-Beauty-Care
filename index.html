@@ -1,2932 +1,576 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
     <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Namrata Beauty Care</title>
+    
+    <!-- EmailJS SDK -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 
-    <!-- EmailJS -->
-    <script
-        src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js">
-    </script>
-
-
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+    
     <style>
+        :root {
+            --primary: #d4a373;
+            --primary-hover: #bc8a5f;
+            --bg-light: #faf9f6;
+            --text-dark: #333333;
+            --card-bg: #ffffff;
+            --shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+            --shadow-hover: 0 12px 25px rgba(212, 163, 115, 0.25);
+        }
 
         * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-            font-family: "Segoe UI", Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-
-
-        :root {
-
-            --primary: #d4a373;
-            --primary-dark: #b98255;
-            --light: #faf9f6;
-            --white: #ffffff;
-            --dark: #333333;
-            --green: #198754;
-            --yellow: #ffc107;
-            --red: #dc3545;
-
-            --shadow:
-                0 8px 25px rgba(0,0,0,0.08);
-
-        }
-
-
-        html {
-            scroll-behavior: smooth;
-        }
-
 
         body {
-
-            background: var(--light);
-
-            color: var(--dark);
-
+            background-color: var(--bg-light);
+            color: var(--text-dark);
             line-height: 1.6;
-
         }
-
-
-        /* ==============================
-           HEADER
-        ============================== */
 
         header {
-
-            position: sticky;
-
-            top: 0;
-
-            z-index: 1000;
-
-            background: rgba(255,255,255,0.96);
-
-            backdrop-filter: blur(10px);
-
-            padding: 15px 5%;
-
+            background: var(--card-bg);
+            padding: 1rem 5%;
             display: flex;
-
             justify-content: space-between;
-
             align-items: center;
-
-            gap: 15px;
-
-            flex-wrap: wrap;
-
             box-shadow: var(--shadow);
-
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            flex-wrap: wrap;
+            gap: 1rem;
         }
-
 
         .logo {
-
             font-size: 1.5rem;
-
-            font-weight: 800;
-
+            font-weight: 700;
             color: var(--primary);
-
         }
-
 
         nav {
-
             display: flex;
-
             align-items: center;
-
-            gap: 12px;
-
-            flex-wrap: wrap;
-
+            gap: 1.5rem;
         }
-
 
         nav a {
-
             text-decoration: none;
-
-            color: var(--dark);
-
-            font-weight: 600;
-
+            color: var(--text-dark);
+            font-weight: 500;
         }
-
-
-        nav a:hover {
-
-            color: var(--primary-dark);
-
-        }
-
 
         .call-btn {
-
             background: var(--primary);
-
             color: white !important;
-
-            padding: 8px 17px;
-
-            border-radius: 25px;
-
-            transition: 0.3s;
-
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-weight: 600;
+            transition: background 0.3s;
         }
-
 
         .call-btn:hover {
-
-            background: var(--primary-dark);
-
-            transform: translateY(-2px);
-
+            background: var(--primary-hover);
         }
-
-
-        .customer-btn {
-
-            border: none;
-
-            background: #333;
-
-            color: white;
-
-            padding: 9px 15px;
-
-            border-radius: 25px;
-
-            cursor: pointer;
-
-            font-weight: 600;
-
-            transition: 0.3s;
-
-        }
-
-
-        .customer-btn:hover {
-
-            background: #555;
-
-            transform: translateY(-2px);
-
-        }
-
-
-        /* ==============================
-           HERO
-        ============================== */
 
         .hero {
-
-            min-height: 58vh;
-
-            background:
-
-                linear-gradient(
-                    rgba(0,0,0,0.48),
-                    rgba(0,0,0,0.48)
-                ),
-
-                url(
-                    "https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=1600&q=85"
-                )
-
-                center/cover no-repeat;
-
+            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=1200&q=80') center/cover no-repeat;
+            height: 50vh;
             display: flex;
-
             flex-direction: column;
-
             justify-content: center;
-
             align-items: center;
-
-            text-align: center;
-
             color: white;
-
-            padding: 30px;
-
+            text-align: center;
+            padding: 0 1rem;
         }
-
 
         .hero h1 {
-
-            font-size:
-                clamp(2.2rem, 6vw, 4rem);
-
-            text-shadow:
-                3px 3px 8px rgba(0,0,0,0.6);
-
-            margin-bottom: 10px;
-
+            font-size: 2.8rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
         }
-
 
         .hero p {
-
-            font-size:
-                clamp(1rem, 3vw, 1.4rem);
-
+            font-size: 1.2rem;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.6);
         }
-
-
-        .hero-btn {
-
-            margin-top: 25px;
-
-            background: var(--primary);
-
-            color: white;
-
-            text-decoration: none;
-
-            padding: 13px 28px;
-
-            border-radius: 30px;
-
-            font-weight: 700;
-
-            transition: 0.3s;
-
-        }
-
-
-        .hero-btn:hover {
-
-            background: var(--primary-dark);
-
-            transform: translateY(-3px);
-
-        }
-
-
-        /* ==============================
-           CONTAINER
-        ============================== */
 
         .container {
-
             max-width: 1100px;
-
-            margin: 70px auto;
-
-            padding: 0 20px;
-
+            margin: 3rem auto;
+            padding: 0 1.5rem;
         }
-
 
         .section-title {
-
             text-align: center;
-
+            font-size: 2.2rem;
             color: var(--primary);
-
-            font-size:
-                clamp(1.8rem, 5vw, 2.5rem);
-
-            margin-bottom: 40px;
-
+            margin-bottom: 2.5rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
         }
-
-
-        /* ==============================
-           SERVICES
-        ============================== */
 
         .services-grid {
-
             display: grid;
-
-            grid-template-columns:
-                repeat(auto-fit, minmax(210px, 1fr));
-
-            gap: 25px;
-
+            grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+            gap: 1.8rem;
+            margin-bottom: 4rem;
         }
-
 
         .service-card {
-
-            background: white;
-
-            padding: 30px 20px;
-
-            text-align: center;
-
-            border-radius: 18px;
-
+            background: var(--card-bg);
+            padding: 2rem 1.5rem;
+            border-radius: 16px;
             box-shadow: var(--shadow);
-
-            border:
-                1px solid
-                rgba(212,163,115,0.15);
-
-            transition: 0.35s;
-
+            text-align: center;
+            border: 1px solid rgba(212, 163, 115, 0.15);
+            transition: all 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
         }
 
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, #d4a373, #e7c6a5);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .service-card .icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.8rem;
+            display: block;
+            transition: transform 0.3s ease;
+        }
+
+        .service-card h3 {
+            font-size: 1.15rem;
+            color: var(--text-dark);
+            font-weight: 600;
+        }
 
         .service-card:hover {
-
-            transform: translateY(-10px);
-
-            box-shadow:
-                0 15px 35px
-                rgba(212,163,115,0.25);
-
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-hover);
             border-color: var(--primary);
-
         }
-
-
-        .service-icon {
-
-            font-size: 3rem;
-
-            margin-bottom: 15px;
-
-        }
-
-
-        /* ==============================
-           CUSTOMER PROFILE
-        ============================== */
-
-        .profile-card {
-
-            display: none;
-
-            max-width: 750px;
-
-            margin: 0 auto;
-
-            background: white;
-
-            padding: 25px;
-
-            border-radius: 20px;
-
-            box-shadow: var(--shadow);
-
-            border-left:
-                5px solid var(--primary);
-
-        }
-
-
-        .profile-card.show {
-
-            display: block;
-
-        }
-
-
-        .profile-top {
-
-            display: flex;
-
-            align-items: center;
-
-            gap: 15px;
-
-            margin-bottom: 20px;
-
-        }
-
-
-        .profile-icon {
-
-            width: 60px;
-
-            height: 60px;
-
-            min-width: 60px;
-
-            border-radius: 50%;
-
-            background: var(--primary);
-
-            color: white;
-
-            display: flex;
-
-            justify-content: center;
-
-            align-items: center;
-
-            font-size: 27px;
-
-        }
-
-
-        .profile-info {
-
-            flex: 1;
-
-        }
-
-
-        .profile-info h3 {
-
-            color: var(--primary-dark);
-
-        }
-
-
-        .profile-info p {
-
-            margin-top: 3px;
-
-        }
-
-
-        .profile-actions {
-
-            display: flex;
-
-            gap: 7px;
-
-            flex-wrap: wrap;
-
-        }
-
-
-        .small-btn {
-
-            border: none;
-
-            padding: 8px 13px;
-
-            border-radius: 20px;
-
-            cursor: pointer;
-
-            font-weight: 600;
-
-        }
-
-
-        .edit-btn {
-
-            background: #333;
-
-            color: white;
-
-        }
-
-
-        .logout-btn {
-
-            background: var(--red);
-
-            color: white;
-
-        }
-
-
-        /* ==============================
-           BOOKINGS HISTORY
-        ============================== */
-
-        .booking-history {
-
-            margin-top: 25px;
-
-        }
-
-
-        .booking-history-title {
-
-            font-size: 1.2rem;
-
-            font-weight: 700;
-
-            color: var(--primary-dark);
-
-            margin-bottom: 15px;
-
-        }
-
-
-        .booking-list {
-
-            display: grid;
-
-            gap: 15px;
-
-        }
-
-
-        .booking-card {
-
-            background: #fffaf4;
-
-            border:
-
-                1px solid
-                rgba(212,163,115,0.35);
-
-            border-radius: 15px;
-
-            padding: 18px;
-
-            position: relative;
-
-        }
-
-
-        .booking-card-header {
-
-            display: flex;
-
-            justify-content: space-between;
-
-            align-items: center;
-
-            gap: 10px;
-
-            margin-bottom: 12px;
-
-        }
-
-
-        .booking-number {
-
-            font-weight: 700;
-
-            color: var(--primary-dark);
-
-        }
-
-
-        .pending {
-
-            background: var(--yellow);
-
-            color: white;
-
-            padding: 4px 10px;
-
-            border-radius: 20px;
-
-            font-size: 12px;
-
-            font-weight: 700;
-
-        }
-
-
-        .accepted {
-
-            background: var(--green);
-
-            color: white;
-
-            padding: 4px 10px;
-
-            border-radius: 20px;
-
-            font-size: 12px;
-
-            font-weight: 700;
-
-        }
-
-
-        .rejected {
-
-            background: var(--red);
-
-            color: white;
-
-            padding: 4px 10px;
-
-            border-radius: 20px;
-
-            font-size: 12px;
-
-            font-weight: 700;
-
-        }
-
-
-        .booking-details {
-
-            display: grid;
-
-            gap: 6px;
-
-        }
-
-
-        .booking-detail-row {
-
-            display: flex;
-
-            justify-content: space-between;
-
-            gap: 15px;
-
-            border-bottom:
-                1px solid
-                rgba(0,0,0,0.05);
-
-            padding-bottom: 5px;
-
-        }
-
-
-        .booking-detail-row:last-child {
-
-            border-bottom: none;
-
-        }
-
-
-        .no-booking {
-
-            text-align: center;
-
-            padding: 20px;
-
-            background: #fafafa;
-
-            border-radius: 12px;
-
-            color: #777;
-
-        }
-
-
-        .new-booking-btn {
-
-            width: 100%;
-
-            margin-top: 20px;
-
-            background: var(--primary);
-
-            color: white;
-
-            border: none;
-
-            padding: 13px;
-
-            border-radius: 30px;
-
-            cursor: pointer;
-
-            font-weight: 700;
-
-            font-size: 1rem;
-
-        }
-
-
-        .new-booking-btn:hover {
-
-            background: var(--primary-dark);
-
-        }
-
-
-        /* ==============================
-           BOOKING FORM
-        ============================== */
 
         .booking-section {
-
-            max-width: 600px;
-
-            margin: auto;
-
-            background: white;
-
-            padding: 30px;
-
-            border-radius: 20px;
-
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 15px;
             box-shadow: var(--shadow);
-
+            max-width: 550px;
+            margin: 0 auto;
         }
-
 
         .form-group {
-
-            margin-bottom: 18px;
-
+            margin-bottom: 1.2rem;
         }
-
 
         .form-group label {
-
             display: block;
-
-            margin-bottom: 7px;
-
-            font-weight: 600;
-
+            margin-bottom: 0.4rem;
+            font-weight: 500;
         }
 
-
-        .form-group input,
-        .form-group select {
-
+        .form-group input, .form-group select {
             width: 100%;
-
-            padding: 13px;
-
+            padding: 0.75rem;
             border: 1px solid #ddd;
-
-            border-radius: 10px;
-
+            border-radius: 8px;
             font-size: 1rem;
-
-            outline: none;
-
+            transition: border-color 0.3s;
         }
 
-
-        .form-group input:focus,
-        .form-group select:focus {
-
+        .form-group input:focus, .form-group select:focus {
             border-color: var(--primary);
-
-            box-shadow:
-                0 0 0 3px
-                rgba(212,163,115,0.15);
-
+            outline: none;
         }
-
 
         .btn {
-
-            width: 100%;
-
-            border: none;
-
             background: var(--primary);
-
             color: white;
-
-            padding: 14px;
-
-            border-radius: 30px;
-
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 25px;
             font-size: 1rem;
-
-            font-weight: 700;
-
+            font-weight: 600;
             cursor: pointer;
-
-            transition: 0.3s;
-
+            width: 100%;
+            transition: background 0.3s, transform 0.2s;
         }
-
 
         .btn:hover {
-
-            background: var(--primary-dark);
-
+            background: var(--primary-hover);
             transform: translateY(-2px);
-
         }
-
-
-        .btn:disabled {
-
-            opacity: 0.6;
-
-            cursor: not-allowed;
-
-        }
-
-
-        /* ==============================
-           STATUS
-        ============================== */
 
         .status-box {
-
             display: none;
-
-            margin-top: 20px;
-
-            padding: 20px;
-
-            text-align: center;
-
-            border-radius: 15px;
-
-            background: #fff3cd;
-
-            color: #856404;
-
-            border: 1px solid #ffeeba;
-
-        }
-
-
-        /* ==============================
-           MODAL
-        ============================== */
-
-        .modal {
-
-            display: none;
-
-            position: fixed;
-
-            inset: 0;
-
-            z-index: 3000;
-
-            background:
-                rgba(0,0,0,0.65);
-
-            justify-content: center;
-
-            align-items: center;
-
-            padding: 20px;
-
-        }
-
-
-        .modal.show {
-
-            display: flex;
-
-        }
-
-
-        .modal-content {
-
-            width: 100%;
-
-            max-width: 500px;
-
-            background: white;
-
-            padding: 30px;
-
-            border-radius: 20px;
-
-            box-shadow:
-                0 20px 60px
-                rgba(0,0,0,0.3);
-
-            animation:
-                popup 0.3s ease;
-
-        }
-
-
-        @keyframes popup {
-
-            from {
-
-                transform: scale(0.8);
-
-                opacity: 0;
-
-            }
-
-            to {
-
-                transform: scale(1);
-
-                opacity: 1;
-
-            }
-
-        }
-
-
-        .modal-header {
-
-            display: flex;
-
-            justify-content: space-between;
-
-            align-items: center;
-
-            margin-bottom: 20px;
-
-        }
-
-
-        .modal-header h2 {
-
-            color: var(--primary-dark);
-
-        }
-
-
-        .close-btn {
-
-            border: none;
-
-            background: transparent;
-
-            font-size: 28px;
-
-            cursor: pointer;
-
-            color: #777;
-
-        }
-
-
-        .register-note {
-
-            background: #fff8ef;
-
-            border-left:
-                4px solid var(--primary);
-
-            padding: 12px;
-
+            padding: 1.2rem;
+            margin-top: 1.5rem;
             border-radius: 8px;
-
-            margin-bottom: 20px;
-
-            font-size: 14px;
-
+            text-align: center;
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeeba;
         }
 
+        .badge {
+            display: inline-block;
+            padding: 0.25em 0.6em;
+            font-size: 85%;
+            font-weight: 700;
+            border-radius: 10px;
+            color: #fff;
+        }
 
-        /* ==============================
-           FOOTER
-        ============================== */
+        .badge-pending { background-color: #ffc107; }
+        .badge-approved { background-color: #28a745; }
+        .badge-rejected { background-color: #dc3545; }
+
+        /* My Bookings Section Styles */
+        .my-bookings-card {
+            background: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            margin-bottom: 1rem;
+            border-left: 5px solid var(--primary);
+        }
+
+        .booking-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
 
         footer {
-
-            margin-top: 80px;
-
-            background: #222;
-
-            color: white;
-
             text-align: center;
-
-            padding: 35px 20px;
-
+            padding: 2rem 1.5rem;
+            background: #222;
+            color: #fff;
+            margin-top: 4rem;
         }
-
 
         footer a {
-
             color: var(--primary);
-
             text-decoration: none;
-
         }
 
-
-        footer p {
-
-            margin: 7px 0;
-
+        .footer-info {
+            margin-bottom: 1rem;
+            line-height: 1.8;
         }
-
-
-        /* ==============================
-           TOAST
-        ============================== */
-
-        .toast {
-
-            position: fixed;
-
-            right: 20px;
-
-            bottom: 20px;
-
-            background: #222;
-
-            color: white;
-
-            padding: 15px 20px;
-
-            border-radius: 10px;
-
-            box-shadow: var(--shadow);
-
-            display: none;
-
-            z-index: 5000;
-
-            max-width: 330px;
-
-        }
-
-
-        .toast.show {
-
-            display: block;
-
-            animation:
-                toastIn 0.3s ease;
-
-        }
-
-
-        @keyframes toastIn {
-
-            from {
-
-                transform:
-                    translateY(30px);
-
-                opacity: 0;
-
-            }
-
-            to {
-
-                transform:
-                    translateY(0);
-
-                opacity: 1;
-
-            }
-
-        }
-
-
-        /* ==============================
-           MOBILE
-        ============================== */
-
-        @media(max-width:700px) {
-
-            header {
-
-                justify-content: center;
-
-            }
-
-
-            nav {
-
-                justify-content: center;
-
-            }
-
-
-            nav a {
-
-                font-size: 13px;
-
-            }
-
-
-            .call-btn {
-
-                padding:
-                    7px 12px;
-
-            }
-
-
-            .hero {
-
-                min-height: 55vh;
-
-            }
-
-
-            .booking-section {
-
-                padding: 20px;
-
-            }
-
-
-            .profile-top {
-
-                align-items: flex-start;
-
-            }
-
-
-            .profile-actions {
-
-                flex-direction: column;
-
-            }
-
-
-            .small-btn {
-
-                font-size: 12px;
-
-                padding:
-                    7px 10px;
-
-            }
-
-
-            .booking-detail-row {
-
-                flex-direction: column;
-
-                gap: 0;
-
-            }
-
-        }
-
     </style>
-
 </head>
-
-
 <body>
 
-
-    <!-- =====================================
-         HEADER
-    ====================================== -->
-
     <header>
-
-        <div class="logo">
-
-            Namrata Beauty Care
-
-        </div>
-
-
+        <div class="logo">Namrata Beauty Care</div>
         <nav>
-
-            <a href="#services">
-                Services
-            </a>
-
-            <a href="#myBookings">
-                My Bookings
-            </a>
-
-            <a href="#booking">
-                Booking
-            </a>
-
-
-            <button
-                class="customer-btn"
-                id="customerBtn"
-                onclick="openRegistration()">
-
-                👤 Register
-
-            </button>
-
-
-            <a
-                href="tel:+919725573152"
-                class="call-btn">
-
-                📞 Call Now
-
-            </a>
-
+            <a href="#services">Services</a>
+            <a href="#booking">Book Now</a>
+            <a href="#my-bookings">My Bookings</a>
+            <a href="tel:+919725573152" class="call-btn">📞 Call Now</a>
         </nav>
-
     </header>
 
-
-    <!-- =====================================
-         HERO
-    ====================================== -->
-
     <section class="hero">
-
-        <h1>
-            Namrata Beauty Care
-        </h1>
-
-        <p>
-            Enhance Your Natural Beauty ✨
-        </p>
-
-
-        <a
-            href="#booking"
-            class="hero-btn">
-
-            Book Appointment
-
-        </a>
-
+        <h1>Namrata Beauty Care</h1>
+        <p>Enhance Your Natural Beauty</p>
     </section>
 
-
-    <!-- =====================================
-         CUSTOMER PROFILE + OLD BOOKINGS
-    ====================================== -->
-
-    <section
-        class="container"
-        id="myBookings">
-
-        <h2 class="section-title">
-
-            👤 My Profile & Bookings
-
-        </h2>
-
-
-        <div
-            class="profile-card"
-            id="profileCard">
-
-
-            <!-- PROFILE -->
-
-            <div class="profile-top">
-
-                <div class="profile-icon">
-                    👤
-                </div>
-
-
-                <div class="profile-info">
-
-                    <h3 id="profileName">
-                        Customer
-                    </h3>
-
-                    <p>
-
-                        📱
-                        <span
-                            id="profilePhone">
-                        </span>
-
-                    </p>
-
-                </div>
-
-
-                <div
-                    class="profile-actions">
-
-                    <button
-                        class="small-btn edit-btn"
-                        onclick="openEditRegistration()">
-
-                        Edit
-
-                    </button>
-
-
-                    <button
-                        class="small-btn logout-btn"
-                        onclick="logoutCustomer()">
-
-                        Logout
-
-                    </button>
-
-                </div>
-
-            </div>
-
-
-            <p>
-
-                ✅ Your registration is saved on
-                this device.
-
-            </p>
-
-
-            <!-- BOOKING HISTORY -->
-
-            <div class="booking-history">
-
-                <div
-                    class="booking-history-title">
-
-                    📋 Your Previous Bookings
-
-                </div>
-
-
-                <div
-                    class="booking-list"
-                    id="bookingList">
-
-                </div>
-
-
-                <button
-                    class="new-booking-btn"
-                    onclick="startNewBooking()">
-
-                    ➕ New Appointment
-
-                </button>
-
-            </div>
-
-        </div>
-
-    </section>
-
-
-    <!-- =====================================
-         SERVICES
-    ====================================== -->
-
-    <section
-        class="container"
-        id="services">
-
-        <h2 class="section-title">
-
-            Our Services
-
-        </h2>
-
-
+    <div class="container" id="services">
+        <h2 class="section-title">Our Services</h2>
         <div class="services-grid">
-
-
             <div class="service-card">
-
-                <div class="service-icon">
-                    ✨
-                </div>
-
-                <h3>
-                    Eyebrow & Wax
-                </h3>
-
+                <span class="icon">✨</span>
+                <h3>Eyebrow & Wax</h3>
             </div>
-
-
             <div class="service-card">
-
-                <div class="service-icon">
-                    🌿
-                </div>
-
-                <h3>
-                    Facial & Skin Care
-                </h3>
-
+                <span class="icon">🌿</span>
+                <h3>Facial & Skin Care</h3>
             </div>
-
-
             <div class="service-card">
-
-                <div class="service-icon">
-                    ✂️
-                </div>
-
-                <h3>
-                    Hair Cut
-                </h3>
-
+                <span class="icon">✂️</span>
+                <h3>Hair Cut</h3>
             </div>
-
-
             <div class="service-card">
-
-                <div class="service-icon">
-                    💄
-                </div>
-
-                <h3>
-                    Makeup & Hairstyle
-                </h3>
-
+                <span class="icon">💄</span>
+                <h3>Makeup & Hairstyle</h3>
             </div>
-
-
             <div class="service-card">
-
-                <div class="service-icon">
-                    👑
-                </div>
-
-                <h3>
-                    Bridal Package
-                </h3>
-
+                <span class="icon">👑</span>
+                <h3>Bridal Package</h3>
             </div>
-
-
         </div>
+    </div>
 
-    </section>
-
-
-    <!-- =====================================
-         BOOKING FORM
-    ====================================== -->
-
-    <section
-        class="container"
-        id="booking">
-
-        <h2 class="section-title">
-
-            Book an Appointment
-
-        </h2>
-
-
+    <div class="container" id="booking">
+        <h2 class="section-title">Book an Appointment</h2>
         <div class="booking-section">
-
-
             <form id="bookingForm">
-
-
-                <!-- NAME -->
-
                 <div class="form-group">
-
-                    <label>
-                        Full Name
-                    </label>
-
-                    <input
-                        type="text"
-                        id="custName"
-                        required
-                        placeholder="Enter your full name">
-
+                    <label>Full Name</label>
+                    <input type="text" id="custName" required placeholder="Enter your full name">
                 </div>
-
-
-                <!-- PHONE -->
-
                 <div class="form-group">
-
-                    <label>
-                        Phone Number
-                    </label>
-
-                    <input
-                        type="tel"
-                        id="custPhone"
-                        maxlength="10"
-                        required
-                        placeholder="Enter 10-digit phone number">
-
+                    <label>Phone Number</label>
+                    <input type="tel" id="custPhone" required placeholder="Enter 10-digit phone number">
                 </div>
-
-
-                <!-- SERVICE -->
-
                 <div class="form-group">
-
-                    <label>
-                        Select Service
-                    </label>
-
-                    <select
-                        id="custService"
-                        required>
-
-                        <option value="">
-                            -- Choose Service --
-                        </option>
-
-                        <option value="Eyebrow & Wax">
-                            Eyebrow & Wax
-                        </option>
-
-                        <option value="Facial & Skin Care">
-                            Facial & Skin Care
-                        </option>
-
-                        <option value="Hair Cut">
-                            Hair Cut
-                        </option>
-
-                        <option value="Makeup & Hairstyle">
-                            Makeup & Hairstyle
-                        </option>
-
-                        <option value="Bridal Package">
-                            Bridal Package
-                        </option>
-
+                    <label>Select Service</label>
+                    <select id="custService" required>
+                        <option value="">-- Choose Service --</option>
+                        <option value="Eyebrow & Wax">Eyebrow & Wax</option>
+                        <option value="Facial & Skin Care">Facial & Skin Care</option>
+                        <option value="Hair Cut">Hair Cut</option>
+                        <option value="Makeup & Hairstyle">Makeup & Hairstyle</option>
+                        <option value="Bridal Package">Bridal Package</option>
                     </select>
-
                 </div>
-
-
-                <!-- DATE -->
-
                 <div class="form-group">
-
-                    <label>
-                        Date
-                    </label>
-
-                    <input
-                        type="date"
-                        id="custDate"
-                        required>
-
+                    <label>Date</label>
+                    <input type="date" id="custDate" required>
                 </div>
-
-
-                <button
-                    type="submit"
-                    id="submitBtn"
-                    class="btn">
-
-                    Send Booking Request
-
-                </button>
-
-
+                <button type="submit" id="submitBtn" class="btn">Send Booking Request</button>
             </form>
 
-
-            <!-- STATUS -->
-
-            <div
-                id="statusBox"
-                class="status-box">
-
-                <h3>
-                    🎉 Booking Request Sent!
-                </h3>
-
-                <p style="margin:10px 0;">
-
-                    Your booking status:
-
-                    <strong>
-                        PENDING
-                    </strong>
-
-                </p>
-
-                <p>
-
-                    Your booking has been saved.
-
-                    You can see it in
-                    <b>My Bookings</b>.
-
-                </p>
-
+            <div id="statusBox" class="status-box">
+                <h3>Booking Status</h3>
+                <p style="margin: 0.5rem 0;">Status: <span id="statusBadge" class="badge badge-pending">PENDING</span></p>
+                <small id="statusText">The owner will review your request shortly.</small>
+                <br><br>
+                <button onclick="clearBooking()" style="padding: 6px 14px; cursor: pointer; border-radius: 5px; border: 1px solid #ccc;">New Booking</button>
             </div>
-
         </div>
-
-    </section>
-
-
-    <!-- =====================================
-         REGISTRATION MODAL
-    ====================================== -->
-
-    <div
-        class="modal"
-        id="registrationModal">
-
-
-        <div class="modal-content">
-
-
-            <div class="modal-header">
-
-                <h2 id="modalTitle">
-
-                    Customer Registration
-
-                </h2>
-
-
-                <button
-                    class="close-btn"
-                    onclick="closeRegistration()">
-
-                    ×
-
-                </button>
-
-            </div>
-
-
-            <div class="register-note">
-
-                🔐 Your name and mobile number
-                will be saved on this device.
-
-                You won't need to register again
-                next time.
-
-            </div>
-
-
-            <form id="registrationForm">
-
-
-                <div class="form-group">
-
-                    <label>
-                        Full Name
-                    </label>
-
-                    <input
-                        type="text"
-                        id="registerName"
-                        required
-                        placeholder="Enter your full name">
-
-                </div>
-
-
-                <div class="form-group">
-
-                    <label>
-                        Mobile Number
-                    </label>
-
-                    <input
-                        type="tel"
-                        id="registerPhone"
-                        maxlength="10"
-                        required
-                        placeholder="Enter 10-digit mobile number">
-
-                </div>
-
-
-                <button
-                    type="submit"
-                    class="btn">
-
-                    Save Registration
-
-                </button>
-
-
-            </form>
-
-        </div>
-
     </div>
 
-
-    <!-- =====================================
-         TOAST
-    ====================================== -->
-
-    <div
-        class="toast"
-        id="toast">
-
-        Message
-
+    <!-- My Bookings Search Section -->
+    <div class="container" id="my-bookings">
+        <h2 class="section-title">Check My Bookings</h2>
+        <div class="booking-section">
+            <div class="form-group">
+                <label>Enter Your Mobile Number</label>
+                <input type="tel" id="searchPhone" placeholder="Enter your 10-digit number">
+            </div>
+            <button onclick="fetchMyBookings()" class="btn">Search Bookings</button>
+            
+            <div id="myBookingsList" style="margin-top: 1.5rem;"></div>
+        </div>
     </div>
-
-
-    <!-- =====================================
-         FOOTER
-    ====================================== -->
 
     <footer>
-
-        <p>
-
-            <strong>
-                📞 Contact:
-            </strong>
-
-            <a href="tel:+919725573152">
-
-                +91 9725573152
-
-            </a>
-
-        </p>
-
-
-        <p>
-
-            <strong>
-                📍 Address:
-            </strong>
-
-            <a
-                href="https://www.google.com/maps/search/?api=1&query=D-301+Madhav+Residency+Laganiya+Hanuman+Mandir+viratnagar+Road+Odhav"
-                target="_blank">
-
-                D-301 Madhav Residency,
-                Laganiya Hanuman Mandir,
-                Viratnagar Road, Odhav
-
-            </a>
-
-        </p>
-
-
-        <p style="margin-top:15px;">
-
-            © 2026 Namrata Beauty Care.
-            All Rights Reserved.
-
-        </p>
-
+        <div class="footer-info">
+            <p><strong>📞 Contact:</strong> <a href="tel:+919725573152">+91 9725573152</a></p>
+            <p><strong>📍 Address:</strong> <a href="https://www.google.com/maps/search/?api=1&query=D-301+Madhav+Residency+Laganiya+Hanuman+Mandir+viratnagar+Road+Odhav" target="_blank">D-301 Madhav Residency, Laganiya Hanuman Mandir, Viratnagar Road, Odhav</a></p>
+        </div>
+        <p>&copy; 2026 Namrata Beauty Care. All Rights Reserved.</p>
     </footer>
 
-
-    <!-- =====================================
-         JAVASCRIPT
-    ====================================== -->
-
     <script>
+        // 1. Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyD48TMWrRojEC2QHf7H7XDoLt9j2BLmoH0",
+            authDomain: "namrata-beauty-care-eee35.firebaseapp.com",
+            projectId: "namrata-beauty-care-eee35",
+            storageBucket: "namrata-beauty-care-eee35.firebasestorage.app",
+            messagingSenderId: "931432545372",
+            appId: "1:931432545372:web:3be8a746d5bbf3da233a99",
+            measurementId: "G-BESF27ZW3W"
+        };
 
+        // Initialize Firebase & Firestore
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
 
-        /* =====================================
-           EMAILJS SETTINGS
-        ===================================== */
+        // 2. EmailJS Configuration
+        const EMAILJS_PUBLIC_KEY = "qW4toNwES4gnrWCkg";
+        const EMAILJS_SERVICE_ID = "service_x5a1tlz";
+        const EMAILJS_TEMPLATE_ID = "template_q0ynfw8";
+        emailjs.init(EMAILJS_PUBLIC_KEY);
 
-        const PUBLIC_KEY =
-            "qW4toNwES4gnrWCkg";
+        // Window Load Handler
+        window.onload = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const actionId = urlParams.get('id');
+            const action = urlParams.get('action');
 
-        const SERVICE_ID =
-            "service_x5a1tlz";
-
-        const TEMPLATE_ID =
-            "template_q0ynfw8";
-
-
-        emailjs.init(PUBLIC_KEY);
-
-
-        /* =====================================
-           STORAGE KEYS
-        ===================================== */
-
-        const CUSTOMER_KEY =
-            "namrataBeautyCustomer";
-
-        const BOOKINGS_KEY =
-            "namrataBeautyBookings";
-
-
-        /* =====================================
-           PAGE LOAD
-        ===================================== */
-
-        document.addEventListener(
-            "DOMContentLoaded",
-            function() {
-
-                setMinimumDate();
-
-                loadCustomer();
-
-                loadBookings();
-
-            }
-        );
-
-
-        /* =====================================
-           CUSTOMER LOAD
-        ===================================== */
-
-        function loadCustomer() {
-
-            const saved =
-                localStorage.getItem(
-                    CUSTOMER_KEY
-                );
-
-
-            if (saved) {
-
-                try {
-
-                    const customer =
-                        JSON.parse(saved);
-
-
-                    showCustomer(
-                        customer
-                    );
-
-
-                    document.getElementById(
-                        "custName"
-                    ).value =
-                        customer.name;
-
-
-                    document.getElementById(
-                        "custPhone"
-                    ).value =
-                        customer.phone;
-
-                }
-
-                catch(error) {
-
-                    console.log(error);
-
-                    localStorage.removeItem(
-                        CUSTOMER_KEY
-                    );
-
-                }
-
+            if (actionId && action) {
+                db.collection("bookings").doc(actionId).update({
+                    status: action
+                }).then(() => {
+                    document.body.innerHTML = `
+                        <div style="text-align:center; margin-top:15%; font-family:sans-serif;">
+                            <h1 style="color: ${action === 'APPROVED' ? '#28a745' : '#dc3545'};">
+                                Booking ${action} Successfully!
+                            </h1>
+                            <p style="font-size: 1.2rem; color: #555;">You can close this tab now.</p>
+                        </div>
+                    `;
+                });
+                return;
             }
 
-        }
-
-
-        /* =====================================
-           SHOW CUSTOMER
-        ===================================== */
-
-        function showCustomer(customer) {
-
-            document.getElementById(
-                "profileCard"
-            ).classList.add("show");
-
-
-            document.getElementById(
-                "profileName"
-            ).innerText =
-                customer.name;
-
-
-            document.getElementById(
-                "profilePhone"
-            ).innerText =
-                customer.phone;
-
-
-            document.getElementById(
-                "customerBtn"
-            ).innerText =
-                "👤 My Profile";
-
-        }
-
-
-        /* =====================================
-           OPEN REGISTRATION
-        ===================================== */
-
-        function openRegistration() {
-
-            const modal =
-                document.getElementById(
-                    "registrationModal"
-                );
-
-
-            const saved =
-                localStorage.getItem(
-                    CUSTOMER_KEY
-                );
-
-
-            if (saved) {
-
-                const customer =
-                    JSON.parse(saved);
-
-
-                document.getElementById(
-                    "modalTitle"
-                ).innerText =
-                    "👤 My Profile";
-
-
-                document.getElementById(
-                    "registerName"
-                ).value =
-                    customer.name;
-
-
-                document.getElementById(
-                    "registerPhone"
-                ).value =
-                    customer.phone;
-
+            const currentBookingId = localStorage.getItem('bookingId');
+            if (currentBookingId) {
+                showBookingStatus(currentBookingId);
             }
+        };
 
-            else {
+        // Form Submit Event
+        document.getElementById('bookingForm').addEventListener('submit', function(e) {
+            e.preventDefault();
 
-                document.getElementById(
-                    "modalTitle"
-                ).innerText =
-                    "Customer Registration";
+            const btn = document.getElementById('submitBtn');
+            btn.innerText = "Sending Request...";
+            btn.disabled = true;
 
+            const name = document.getElementById('custName').value;
+            const phone = document.getElementById('custPhone').value;
+            const service = document.getElementById('custService').value;
+            const date = document.getElementById('custDate').value;
 
-                document.getElementById(
-                    "registrationForm"
-                ).reset();
+            db.collection("bookings").add({
+                name: name,
+                phone: phone,
+                service: service,
+                date: date,
+                status: "PENDING",
+                createdAt: new Date()
+            })
+            .then((docRef) => {
+                const bookingId = docRef.id;
+                localStorage.setItem('bookingId', bookingId);
 
-            }
+                const currentUrl = window.location.href.split('?')[0];
+                const acceptUrl = `${currentUrl}?id=${bookingId}&action=APPROVED`;
+                const rejectUrl = `${currentUrl}?id=${bookingId}&action=REJECTED`;
 
-
-            modal.classList.add(
-                "show"
-            );
-
-        }
-
-
-        /* =====================================
-           EDIT
-        ===================================== */
-
-        function openEditRegistration() {
-
-            openRegistration();
-
-        }
-
-
-        /* =====================================
-           CLOSE MODAL
-        ===================================== */
-
-        function closeRegistration() {
-
-            document.getElementById(
-                "registrationModal"
-            ).classList.remove(
-                "show"
-            );
-
-        }
-
-
-        /* =====================================
-           SAVE CUSTOMER
-        ===================================== */
-
-        document.getElementById(
-            "registrationForm"
-        ).addEventListener(
-            "submit",
-            function(event) {
-
-                event.preventDefault();
-
-
-                const name =
-                    document.getElementById(
-                        "registerName"
-                    ).value.trim();
-
-
-                const phone =
-                    document.getElementById(
-                        "registerPhone"
-                    ).value.trim();
-
-
-                if (name.length < 2) {
-
-                    alert(
-                        "Please enter a valid name."
-                    );
-
-                    return;
-
-                }
-
-
-                if (!/^[0-9]{10}$/.test(phone)) {
-
-                    alert(
-                        "Please enter a valid 10-digit mobile number."
-                    );
-
-                    return;
-
-                }
-
-
-                const customer = {
-
-                    name: name,
-
-                    phone: phone,
-
-                    registeredAt:
-                        new Date().toISOString()
-
+                const templateParams = {
+                    customer_name: name,
+                    customer_phone: phone,
+                    service_name: service,
+                    booking_date: date,
+                    accept_link: acceptUrl,
+                    reject_link: rejectUrl
                 };
 
-
-                localStorage.setItem(
-
-                    CUSTOMER_KEY,
-
-                    JSON.stringify(
-                        customer
-                    )
-
-                );
-
-
-                showCustomer(
-                    customer
-                );
-
-
-                document.getElementById(
-                    "custName"
-                ).value =
-                    name;
-
-
-                document.getElementById(
-                    "custPhone"
-                ).value =
-                    phone;
-
-
-                closeRegistration();
-
-
-                showToast(
-                    "✅ Registration saved successfully!"
-                );
-
-            }
-        );
-
-
-        /* =====================================
-           LOGOUT
-        ===================================== */
-
-        function logoutCustomer() {
-
-            const confirmLogout =
-                confirm(
-                    "Remove your saved registration and bookings from this device?"
-                );
-
-
-            if (!confirmLogout) {
-
-                return;
-
-            }
-
-
-            localStorage.removeItem(
-                CUSTOMER_KEY
-            );
-
-            localStorage.removeItem(
-                BOOKINGS_KEY
-            );
-
-
-            document.getElementById(
-                "profileCard"
-            ).classList.remove(
-                "show"
-            );
-
-
-            document.getElementById(
-                "customerBtn"
-            ).innerText =
-                "👤 Register";
-
-
-            document.getElementById(
-                "custName"
-            ).value = "";
-
-
-            document.getElementById(
-                "custPhone"
-            ).value = "";
-
-
-            loadBookings();
-
-
-            showToast(
-                "Registration and bookings removed."
-            );
-
-        }
-
-
-        /* =====================================
-           LOAD BOOKINGS
-        ===================================== */
-
-        function loadBookings() {
-
-            const list =
-                document.getElementById(
-                    "bookingList"
-                );
-
-
-            list.innerHTML = "";
-
-
-            const savedBookings =
-                localStorage.getItem(
-                    BOOKINGS_KEY
-                );
-
-
-            if (!savedBookings) {
-
-                list.innerHTML = `
-
-                    <div class="no-booking">
-
-                        📭 No previous booking found.
-
-                    </div>
-
-                `;
-
-                return;
-
-            }
-
-
-            let bookings = [];
-
-
-            try {
-
-                bookings =
-                    JSON.parse(
-                        savedBookings
-                    );
-
-            }
-
-            catch(error) {
-
-                console.log(error);
-
-                bookings = [];
-
-            }
-
-
-            if (!Array.isArray(bookings)) {
-
-                bookings = [];
-
-            }
-
-
-            if (bookings.length === 0) {
-
-                list.innerHTML = `
-
-                    <div class="no-booking">
-
-                        📭 No previous booking found.
-
-                    </div>
-
-                `;
-
-                return;
-
-            }
-
-
-            /*
-               Newest booking first
-            */
-
-            bookings
-                .slice()
-                .reverse()
-                .forEach(
-                    function(booking, index) {
-
-                        const status =
-                            booking.status ||
-                            "PENDING";
-
-
-                        let statusClass =
-                            "pending";
-
-
-                        if (
-                            status ===
-                            "ACCEPTED"
-                        ) {
-
-                            statusClass =
-                                "accepted";
-
-                        }
-
-
-                        if (
-                            status ===
-                            "REJECTED"
-                        ) {
-
-                            statusClass =
-                                "rejected";
-
-                        }
-
-
-                        const card =
-                            document.createElement(
-                                "div"
-                            );
-
-
-                        card.className =
-                            "booking-card";
-
-
-                        card.innerHTML = `
-
-                            <div class="booking-card-header">
-
-                                <span class="booking-number">
-
-                                    📅 Booking #${bookings.length - index}
-
-                                </span>
-
-                                <span class="${statusClass}">
-
-                                    ${status}
-
-                                </span>
-
-                            </div>
-
-
-                            <div class="booking-details">
-
-                                <div class="booking-detail-row">
-
-                                    <span>
-                                        💆 Service
-                                    </span>
-
-                                    <strong>
-                                        ${escapeHTML(booking.service)}
-                                    </strong>
-
-                                </div>
-
-
-                                <div class="booking-detail-row">
-
-                                    <span>
-                                        📅 Date
-                                    </span>
-
-                                    <strong>
-                                        ${escapeHTML(booking.date)}
-                                    </strong>
-
-                                </div>
-
-
-                                <div class="booking-detail-row">
-
-                                    <span>
-                                        👤 Name
-                                    </span>
-
-                                    <strong>
-                                        ${escapeHTML(booking.name)}
-                                    </strong>
-
-                                </div>
-
-
-                                <div class="booking-detail-row">
-
-                                    <span>
-                                        📱 Phone
-                                    </span>
-
-                                    <strong>
-                                        ${escapeHTML(booking.phone)}
-                                    </strong>
-
-                                </div>
-
-                            </div>
-
-                        `;
-
-
-                        list.appendChild(
-                            card
-                        );
-
-                    }
-                );
-
-        }
-
-
-        /* =====================================
-           SAVE BOOKING
-        ===================================== */
-
-        function saveBooking(
-            booking
-        ) {
-
-            let bookings = [];
-
-
-            const oldBookings =
-                localStorage.getItem(
-                    BOOKINGS_KEY
-                );
-
-
-            if (oldBookings) {
-
-                try {
-
-                    bookings =
-                        JSON.parse(
-                            oldBookings
-                        );
-
-                }
-
-                catch(error) {
-
-                    bookings = [];
-
-                }
-
-            }
-
-
-            bookings.push(
-                booking
-            );
-
-
-            localStorage.setItem(
-
-                BOOKINGS_KEY,
-
-                JSON.stringify(
-                    bookings
-                )
-
-            );
-
-
-            /*
-               Immediately update
-               booking history
-            */
-
-            loadBookings();
-
-        }
-
-
-        /* =====================================
-           NEW BOOKING
-        ===================================== */
-
-        function startNewBooking() {
-
-            document.getElementById(
-                "bookingForm"
-            ).reset();
-
-
-            const customer =
-                localStorage.getItem(
-                    CUSTOMER_KEY
-                );
-
-
-            if (customer) {
-
-                const data =
-                    JSON.parse(customer);
-
-
-                document.getElementById(
-                    "custName"
-                ).value =
-                    data.name;
-
-
-                document.getElementById(
-                    "custPhone"
-                ).value =
-                    data.phone;
-
-            }
-
-
-            document.getElementById(
-                "bookingForm"
-            ).style.display =
-                "block";
-
-
-            document.getElementById(
-                "statusBox"
-            ).style.display =
-                "none";
-
-
-            document.getElementById(
-                "submitBtn"
-            ).innerText =
-                "Send Booking Request";
-
-
-            document.getElementById(
-                "submitBtn"
-            ).disabled =
-                false;
-
-
-            document.getElementById(
-                "booking"
-            ).scrollIntoView({
-                behavior: "smooth"
+                return emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams);
+            })
+            .then(() => {
+                const bookingId = localStorage.getItem('bookingId');
+                showBookingStatus(bookingId);
+            })
+            .catch((error) => {
+                console.error("Error: ", error);
+                alert("Failed to send booking. Please try again.");
+                btn.innerText = "Send Booking Request";
+                btn.disabled = false;
             });
+        });
 
+        // Live Firebase Status Sync Engine
+        function showBookingStatus(docId) {
+            document.getElementById('bookingForm').style.display = 'none';
+            document.getElementById('statusBox').style.display = 'block';
+
+            db.collection("bookings").doc(docId).onSnapshot((doc) => {
+                if (doc.exists) {
+                    const data = doc.data();
+                    const badge = document.getElementById('statusBadge');
+                    const statusText = document.getElementById('statusText');
+
+                    badge.className = 'badge';
+                    if (data.status === 'APPROVED') {
+                        badge.innerText = 'APPROVED';
+                        badge.classList.add('badge-approved');
+                        statusText.innerText = '🎉 Your booking request has been confirmed!';
+                    } else if (data.status === 'REJECTED') {
+                        badge.innerText = 'REJECTED';
+                        badge.classList.add('badge-rejected');
+                        statusText.innerText = 'Sorry, your booking request was declined for this slot.';
+                    } else {
+                        badge.innerText = 'PENDING';
+                        badge.classList.add('badge-pending');
+                        statusText.innerText = 'The owner will review your request shortly.';
+                    }
+                }
+            });
         }
 
-
-        /* =====================================
-           DATE
-        ===================================== */
-
-        function setMinimumDate() {
-
-            const today =
-                new Date();
-
-
-            const year =
-                today.getFullYear();
-
-
-            const month =
-                String(
-                    today.getMonth() + 1
-                ).padStart(2, "0");
-
-
-            const day =
-                String(
-                    today.getDate()
-                ).padStart(2, "0");
-
-
-            const dateString =
-                `${year}-${month}-${day}`;
-
-
-            document.getElementById(
-                "custDate"
-            ).min =
-                dateString;
-
+        function clearBooking() {
+            localStorage.removeItem('bookingId');
+            location.reload();
         }
 
-
-        /* =====================================
-           BOOKING SUBMIT
-        ===================================== */
-
-        document.getElementById(
-            "bookingForm"
-        ).addEventListener(
-            "submit",
-            function(event) {
-
-                event.preventDefault();
-
-
-                /*
-                   CHECK CUSTOMER
-                */
-
-                const savedCustomer =
-                    localStorage.getItem(
-                        CUSTOMER_KEY
-                    );
-
-
-                if (!savedCustomer) {
-
-                    alert(
-                        "Please register first."
-                    );
-
-
-                    openRegistration();
-
-
-                    return;
-
-                }
-
-
-                const customer =
-                    JSON.parse(
-                        savedCustomer
-                    );
-
-
-                const name =
-                    document.getElementById(
-                        "custName"
-                    ).value.trim();
-
-
-                const phone =
-                    document.getElementById(
-                        "custPhone"
-                    ).value.trim();
-
-
-                const service =
-                    document.getElementById(
-                        "custService"
-                    ).value;
-
-
-                const date =
-                    document.getElementById(
-                        "custDate"
-                    ).value;
-
-
-                if (!service) {
-
-                    alert(
-                        "Please select a service."
-                    );
-
-                    return;
-
-                }
-
-
-                if (!date) {
-
-                    alert(
-                        "Please select a date."
-                    );
-
-                    return;
-
-                }
-
-
-                const btn =
-                    document.getElementById(
-                        "submitBtn"
-                    );
-
-
-                btn.innerText =
-                    "Sending Request...";
-
-
-                btn.disabled =
-                    true;
-
-
-                /*
-                   BOOKING OBJECT
-                */
-
-                const booking = {
-
-                    id:
-                        Date.now(),
-
-                    name:
-                        name,
-
-                    phone:
-                        phone,
-
-                    service:
-                        service,
-
-                    date:
-                        date,
-
-                    status:
-                        "PENDING",
-
-                    createdAt:
-                        new Date().toISOString()
-
-                };
-
-
-                /*
-                   EMAILJS DATA
-                */
-
-                const params = {
-
-                    customer_name:
-                        name,
-
-                    customer_phone:
-                        phone,
-
-                    service_name:
-                        service,
-
-                    booking_date:
-                        date
-
-                };
-
-
-                /*
-                   SEND EMAIL
-                */
-
-                emailjs.send(
-
-                    SERVICE_ID,
-
-                    TEMPLATE_ID,
-
-                    params
-
-                )
-
-                .then(
-
-                    function(response) {
-
-                        console.log(
-                            "Email sent:",
-                            response
-                        );
-
-
-                        /*
-                           SAVE BOOKING
-                        */
-
-                        saveBooking(
-                            booking
-                        );
-
-
-                        /*
-                           SHOW SUCCESS
-                        */
-
-                        document.getElementById(
-                            "bookingForm"
-                        ).style.display =
-                            "none";
-
-
-                        document.getElementById(
-                            "statusBox"
-                        ).style.display =
-                            "block";
-
-
-                        showToast(
-                            "🎉 Booking saved successfully!"
-                        );
-
-
-                        /*
-                           Scroll to
-                           booking history
-                        */
-
-                        setTimeout(
-                            function() {
-
-                                document.getElementById(
-                                    "myBookings"
-                                ).scrollIntoView({
-                                    behavior:
-                                        "smooth"
-                                });
-
-                            },
-                            500
-                        );
-
-                    },
-
-
-                    function(error) {
-
-                        console.log(
-                            "EmailJS Error:",
-                            error
-                        );
-
-
-                        /*
-                           IMPORTANT:
-                           Email failed,
-                           so booking is
-                           NOT saved.
-                        */
-
-                        alert(
-                            "Booking request could not be sent. Please try again."
-                        );
-
-
-                        btn.innerText =
-                            "Send Booking Request";
-
-
-                        btn.disabled =
-                            false;
-
+        // Fetch My Bookings Functionality
+        function fetchMyBookings() {
+            const phone = document.getElementById('searchPhone').value.trim();
+            const listDiv = document.getElementById('myBookingsList');
+
+            if (!phone) {
+                alert("Please enter a valid mobile number.");
+                return;
+            }
+
+            listDiv.innerHTML = "<p style='text-align:center;'>Searching...</p>";
+
+            db.collection("bookings")
+                .where("phone", "==", phone)
+                .get()
+                .then((querySnapshot) => {
+                    listDiv.innerHTML = "";
+                    if (querySnapshot.empty) {
+                        listDiv.innerHTML = "<p style='text-align:center; color:#666;'>No bookings found for this mobile number.</p>";
+                        return;
                     }
 
-                );
+                    querySnapshot.forEach((doc) => {
+                        const data = doc.data();
+                        let badgeClass = 'badge-pending';
+                        if (data.status === 'APPROVED') badgeClass = 'badge-approved';
+                        if (data.status === 'REJECTED') badgeClass = 'badge-rejected';
 
-            }
-        );
-
-
-        /* =====================================
-           PHONE INPUT
-        ===================================== */
-
-        document.getElementById(
-            "registerPhone"
-        ).addEventListener(
-            "input",
-            function() {
-
-                this.value =
-                    this.value.replace(
-                        /[^0-9]/g,
-                        ""
-                    );
-
-            }
-        );
-
-
-        document.getElementById(
-            "custPhone"
-        ).addEventListener(
-            "input",
-            function() {
-
-                this.value =
-                    this.value.replace(
-                        /[^0-9]/g,
-                        ""
-                    );
-
-            }
-        );
-
-
-        /* =====================================
-           TOAST
-        ===================================== */
-
-        function showToast(
-            message
-        ) {
-
-            const toast =
-                document.getElementById(
-                    "toast"
-                );
-
-
-            toast.innerText =
-                message;
-
-
-            toast.classList.add(
-                "show"
-            );
-
-
-            setTimeout(
-                function() {
-
-                    toast.classList.remove(
-                        "show"
-                    );
-
-                },
-                3000
-            );
-
+                        const cardHtml = `
+                            <div class="my-bookings-card">
+                                <div class="booking-info">
+                                    <strong>${data.service}</strong>
+                                    <span class="badge ${badgeClass}">${data.status}</span>
+                                </div>
+                                <div style="font-size:0.9rem; color:#555; margin-top:0.4rem;">
+                                    📅 Date: ${data.date}<br>
+                                    👤 Name: ${data.name}
+                                </div>
+                            </div>
+                        `;
+                        listDiv.innerHTML += cardHtml;
+                    });
+                })
+                .catch((error) => {
+                    console.error("Error fetching bookings: ", error);
+                    listDiv.innerHTML = "<p style='text-align:center; color:red;'>Error fetching data. Please try again.</p>";
+                });
         }
-
-
-        /* =====================================
-           ESCAPE HTML
-        ===================================== */
-
-        function escapeHTML(
-            text
-        ) {
-
-            const div =
-                document.createElement(
-                    "div"
-                );
-
-
-            div.textContent =
-                text || "";
-
-
-            return div.innerHTML;
-
-        }
-
-
-        /* =====================================
-           CLOSE MODAL OUTSIDE CLICK
-        ===================================== */
-
-        document.getElementById(
-            "registrationModal"
-        ).addEventListener(
-            "click",
-            function(event) {
-
-                if (
-                    event.target === this
-                ) {
-
-                    closeRegistration();
-
-                }
-
-            }
-        );
-
-
     </script>
-
 </body>
-
 </html>
