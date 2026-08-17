@@ -1,17 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Namrata Beauty Care</title>
-    
+
     <!-- EmailJS SDK -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 
     <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
-    
+
     <style>
         :root {
             --primary: #d4a373;
@@ -82,7 +83,7 @@
         }
 
         .hero {
-            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=1200&q=80') center/cover no-repeat;
+            background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=1200&q=80') center/cover no-repeat;
             height: 50vh;
             display: flex;
             flex-direction: column;
@@ -189,7 +190,8 @@
             font-weight: 500;
         }
 
-        .form-group input, .form-group select {
+        .form-group input,
+        .form-group select {
             width: 100%;
             padding: 0.75rem;
             border: 1px solid #ddd;
@@ -198,7 +200,8 @@
             transition: border-color 0.3s;
         }
 
-        .form-group input:focus, .form-group select:focus {
+        .form-group input:focus,
+        .form-group select:focus {
             border-color: var(--primary);
             outline: none;
         }
@@ -241,9 +244,17 @@
             color: #fff;
         }
 
-        .badge-pending { background-color: #ffc107; }
-        .badge-approved { background-color: #28a745; }
-        .badge-rejected { background-color: #dc3545; }
+        .badge-pending {
+            background-color: #ffc107;
+        }
+
+        .badge-approved {
+            background-color: #28a745;
+        }
+
+        .badge-rejected {
+            background-color: #dc3545;
+        }
 
         /* My Bookings Section Styles */
         .my-bookings-card {
@@ -282,6 +293,7 @@
         }
     </style>
 </head>
+
 <body>
 
     <header>
@@ -357,10 +369,13 @@
 
             <div id="statusBox" class="status-box">
                 <h3>Booking Status</h3>
-                <p style="margin: 0.5rem 0;">Status: <span id="statusBadge" class="badge badge-pending">PENDING</span></p>
+                <p style="margin: 0.5rem 0;">Status: <span id="statusBadge" class="badge badge-pending">PENDING</span>
+                </p>
                 <small id="statusText">The owner will review your request shortly.</small>
                 <br><br>
-                <button onclick="clearBooking()" style="padding: 6px 14px; cursor: pointer; border-radius: 5px; border: 1px solid #ccc;">New Booking</button>
+                <button onclick="clearBooking()"
+                    style="padding: 6px 14px; cursor: pointer; border-radius: 5px; border: 1px solid #ccc;">New
+                    Booking</button>
             </div>
         </div>
     </div>
@@ -374,7 +389,7 @@
                 <input type="tel" id="searchPhone" placeholder="Enter your 10-digit number">
             </div>
             <button onclick="fetchMyBookings()" class="btn">Search Bookings</button>
-            
+
             <div id="myBookingsList" style="margin-top: 1.5rem;"></div>
         </div>
     </div>
@@ -382,7 +397,9 @@
     <footer>
         <div class="footer-info">
             <p><strong>📞 Contact:</strong> <a href="tel:+919725573152">+91 9725573152</a></p>
-            <p><strong>📍 Address:</strong> <a href="https://www.google.com/maps/search/?api=1&query=D-301+Madhav+Residency+Laganiya+Hanuman+Mandir+viratnagar+Road+Odhav" target="_blank">D-301 Madhav Residency, Laganiya Hanuman Mandir, Viratnagar Road, Odhav</a></p>
+            <p><strong>📍 Address:</strong> <a
+                    href="https://www.google.com/maps/search/?api=1&query=D-301+Madhav+Residency+Laganiya+Hanuman+Mandir+viratnagar+Road+Odhav"
+                    target="_blank">D-301 Madhav Residency, Laganiya Hanuman Mandir, Viratnagar Road, Odhav</a></p>
         </div>
         <p>&copy; 2026 Namrata Beauty Care. All Rights Reserved.</p>
     </footer>
@@ -410,24 +427,40 @@
         emailjs.init(EMAILJS_PUBLIC_KEY);
 
         // Window Load Handler
-        window.onload = function() {
+        // Window Load Handler (લિંક પર ક્લિક કરવાથી Direct Firebase માં Status અપડેટ થશે)
+        window.onload = function () {
             const urlParams = new URLSearchParams(window.location.search);
             const actionId = urlParams.get('id');
             const action = urlParams.get('action');
 
             if (actionId && action) {
-                db.collection("bookings").doc(actionId).update({
+                // સ્ક્રીન પર તુરંત મેસેજ બતાવશે
+                document.body.innerHTML = `
+                    <div style="text-align:center; margin-top:15%; font-family:sans-serif; padding: 20px;">
+                        <h2 style="color: #555;">Updating Booking Status...</h2>
+                    </div>
+                `;
+
+                // Firestore માં અપડેટ કરશે
+                db.collection("bookings").doc(actionId).set({
                     status: action
-                }).then(() => {
-                    document.body.innerHTML = `
-                        <div style="text-align:center; margin-top:15%; font-family:sans-serif;">
-                            <h1 style="color: ${action === 'APPROVED' ? '#28a745' : '#dc3545'};">
-                                Booking ${action} Successfully!
+                }, { merge: true })
+                    .then(() => {
+                        document.body.innerHTML = `
+                        <div style="text-align:center; margin-top:15%; font-family:sans-serif; padding: 20px;">
+                            <h1 style="color: ${action === 'APPROVED' ? '#28a745' : '#dc3545'}; font-size: 2.5rem;">
+                                Booking ${action} Successfully! 🎉
                             </h1>
-                            <p style="font-size: 1.2rem; color: #555;">You can close this tab now.</p>
+                            <p style="font-size: 1.2rem; color: #555; margin-top: 10px;">
+                                The status has been updated in live database. You can close this window.
+                            </p>
                         </div>
                     `;
-                });
+                    })
+                    .catch((err) => {
+                        console.error("Error updating status: ", err);
+                        document.body.innerHTML = `<h2 style="color:red; text-align:center; margin-top:15%;">Error updating booking: ${err.message}</h2>`;
+                    });
                 return;
             }
 
@@ -438,7 +471,7 @@
         };
 
         // Form Submit Event
-        document.getElementById('bookingForm').addEventListener('submit', function(e) {
+        document.getElementById('bookingForm').addEventListener('submit', function (e) {
             e.preventDefault();
 
             const btn = document.getElementById('submitBtn');
@@ -458,35 +491,35 @@
                 status: "PENDING",
                 createdAt: new Date()
             })
-            .then((docRef) => {
-                const bookingId = docRef.id;
-                localStorage.setItem('bookingId', bookingId);
+                .then((docRef) => {
+                    const bookingId = docRef.id;
+                    localStorage.setItem('bookingId', bookingId);
 
-                const currentUrl = window.location.href.split('?')[0];
-                const acceptUrl = `${currentUrl}?id=${bookingId}&action=APPROVED`;
-                const rejectUrl = `${currentUrl}?id=${bookingId}&action=REJECTED`;
+                    const currentUrl = window.location.href.split('?')[0];
+                    const acceptUrl = `${currentUrl}?id=${bookingId}&action=APPROVED`;
+                    const rejectUrl = `${currentUrl}?id=${bookingId}&action=REJECTED`;
 
-                const templateParams = {
-                    customer_name: name,
-                    customer_phone: phone,
-                    service_name: service,
-                    booking_date: date,
-                    accept_link: acceptUrl,
-                    reject_link: rejectUrl
-                };
+                    const templateParams = {
+                        customer_name: name,
+                        customer_phone: phone,
+                        service_name: service,
+                        booking_date: date,
+                        accept_link: acceptUrl,
+                        reject_link: rejectUrl
+                    };
 
-                return emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams);
-            })
-            .then(() => {
-                const bookingId = localStorage.getItem('bookingId');
-                showBookingStatus(bookingId);
-            })
-            .catch((error) => {
-                console.error("Error: ", error);
-                alert("Failed to send booking. Please try again.");
-                btn.innerText = "Send Booking Request";
-                btn.disabled = false;
-            });
+                    return emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams);
+                })
+                .then(() => {
+                    const bookingId = localStorage.getItem('bookingId');
+                    showBookingStatus(bookingId);
+                })
+                .catch((error) => {
+                    console.error("Error: ", error);
+                    alert("Failed to send booking. Please try again.");
+                    btn.innerText = "Send Booking Request";
+                    btn.disabled = false;
+                });
         });
 
         // Live Firebase Status Sync Engine
@@ -573,4 +606,5 @@
         }
     </script>
 </body>
+
 </html>
